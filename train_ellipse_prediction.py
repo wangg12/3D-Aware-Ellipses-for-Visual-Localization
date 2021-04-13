@@ -120,10 +120,13 @@ if __name__ == "__main__":
                         default=300, type=int)
     parser.add_argument("--valid_interval", help="Interval of epochs between validations.",
                         default=10, type=int)
+    parser.add_argument("--object_id", help="<Optional> Specify a single object id for training.",
+                        default=None, type=int)
     parser.add_argument("--save_all_parameters", action="store_true", 
                         help="Save all the hyper-parameters in checkpoints, "
                              "not only weights (default is False).",
                         default=False)
+
 
     args = parser.parse_args()
 
@@ -137,6 +140,7 @@ if __name__ == "__main__":
     validation_interval = args.valid_interval
     save_all_parameters = args.save_all_parameters
     save_weights_only = not save_all_parameters
+    only_object_id = args.object_id
 
 
     scene = Scene_loader(scene_file)
@@ -146,12 +150,23 @@ if __name__ == "__main__":
         print(" - obj_%02d_%02d" % (obj["category_id"], obj["object_id"]))
     print()
         
-    for obj in scene:
+    if only_object_id is not None and only_object_id >= 0 and only_object_id < len(scene):
+        print("Train only object", only_object_id)
+
+        obj = scene.get_object_by_id(only_object_id)
         run_training(training_dataset_file, validation_dataset_file, obj,
                      nb_epochs=nb_epochs,
                      validation_interval=validation_interval,
                      out_checkpoints_folder=out_checkpoints_folder,
                      out_logs_folder=out_logs_folder,
                      save_weights_only=save_weights_only)
+    else:
+        for obj in scene:
+            run_training(training_dataset_file, validation_dataset_file, obj,
+                        nb_epochs=nb_epochs,
+                        validation_interval=validation_interval,
+                        out_checkpoints_folder=out_checkpoints_folder,
+                        out_logs_folder=out_logs_folder,
+                        save_weights_only=save_weights_only)
 
 

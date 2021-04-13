@@ -36,7 +36,7 @@ class Scene_loader:
         return self.objects[idx]
 
     def get_object_by_id(self, object_id):
-        if idx not in self.object_id_map.keys():
+        if object_id not in self.object_id_map.keys():
             print("Invalid object id")
             return None
         return self.objects[self.object_id_map[object_id]]
