@@ -23,7 +23,7 @@ from pytorch_lightning import loggers as pl_loggers
 from pytorch_lightning.callbacks import ModelCheckpoint
 
 from ellcv.types import Ellipse
-from ellcv.utils.cpp import compute_iou_toms
+from ellcv.utils.cpp import compute_iou_toms_
 from ellcv.visu import draw_ellipse
 
 from config import _cfg
@@ -32,8 +32,8 @@ from loss import SamplingBasedLoss
 
 
 def compute_ellipses_iou(ell1, ell2):
-    return compute_iou_toms(np.hstack(ell1.decompose()),
-                            np.hstack(ell2.decompose()))
+    return compute_iou_toms_(np.hstack(ell1.decompose()),
+                             np.hstack(ell2.decompose()))
 
 
 def build_ellipses_from_pred(pred):
@@ -67,44 +67,49 @@ class EllipsePredictor(pl.LightningModule):
         vgg = models.vgg19().features
         self.backbone = nn.Sequential(vgg, nn.AdaptiveAvgPool2d(output_size=(2, 2)))
         self.n_features = 512*2*2
-        self.mlp = nn.Sequential(nn.Linear(self.n_features, 256),
-                                  nn.ReLU(True),
-                                  nn.Linear(256, 256),
-                                  nn.ReLU(True),
-                                  nn.Linear(256, 64),
-                                  nn.ReLU(True))
-
-        self.abxy = nn.Sequential(nn.Linear(64, 32),
-                                  nn.ReLU(True),
-                                  nn.Linear(32, 4),
-                                  nn.Sigmoid())
-
-        self.angle = nn.Sequential(nn.Linear(64, 32),
-                                  nn.ReLU(True),
-                                  nn.Linear(32, 1),
-                                  nn.Tanh())
-
         # self.mlp = nn.Sequential(nn.Linear(self.n_features, 256),
-        #                           nn.BatchNorm1d(num_features=256),
         #                           nn.ReLU(True),
         #                           nn.Linear(256, 256),
-        #                           nn.BatchNorm1d(num_features=256),
         #                           nn.ReLU(True),
         #                           nn.Linear(256, 64),
-        #                           nn.BatchNorm1d(num_features=64),
         #                           nn.ReLU(True))
 
         # self.abxy = nn.Sequential(nn.Linear(64, 32),
-        #                           nn.BatchNorm1d(num_features=32),
         #                           nn.ReLU(True),
         #                           nn.Linear(32, 4),
         #                           nn.Sigmoid())
 
         # self.angle = nn.Sequential(nn.Linear(64, 32),
-        #                            nn.BatchNorm1d(num_features=32),
-        #                            nn.ReLU(True),
-        #                            nn.Linear(32, 1),
-        #                            nn.Tanh())
+        #                           nn.ReLU(True),
+        #                           nn.Linear(32, 1),
+        #                           nn.Tanh())
+
+        self.mlp = nn.Sequential(nn.Linear(self.n_features, 256),
+                                  nn.BatchNorm1d(num_features=256),
+                                  nn.ReLU(True),
+                                  nn.Linear(256, 256),
+                                  nn.BatchNorm1d(num_features=256),
+                                  nn.ReLU(True),
+                                  nn.Linear(256, 64),
+                                  nn.BatchNorm1d(num_features=64),
+                                  nn.ReLU(True))
+
+        self.abxy = nn.Sequential(nn.Linear(64, 32),
+                                  nn.BatchNorm1d(num_features=32),
+                                  nn.ReLU(True),
+                                  nn.Linear(32, 4),
+                                  nn.Sigmoid())
+
+        self.angle = nn.Sequential(nn.Linear(64, 32),
+                                   nn.BatchNorm1d(num_features=32),
+                                   nn.ReLU(True),
+                                   nn.Linear(32, 1),
+                                   nn.Tanh())
+        self.var = nn.Sequential(nn.Linear(64, 32),
+                                 nn.BatchNorm1d(num_features=32),
+                                 nn.ReLU(True),
+                                 nn.Linear(32, 1),
+                                 nn.ReLU(True))
 
 
         # Validation
@@ -115,7 +120,7 @@ class EllipsePredictor(pl.LightningModule):
         x = self.backbone(x)
         x = x.view(-1, self.n_features)
         x = self.mlp(x)
-        return torch.cat([self.abxy(x), self.angle(x)], dim=1)
+        return torch.cat([self.abxy(x), self.angle(x), self.var(x)], dim=1)
 
 
     def configure_optimizers(self):

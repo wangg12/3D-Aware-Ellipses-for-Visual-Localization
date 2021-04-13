@@ -41,9 +41,10 @@ class SamplingBasedLoss(pl.LightningModule):
     def forward(self, X, Y):
         X[:, :4] *= self.scale
         Y[:, :4] *= self.scale
+        var = X[:, 5]
         vals = []
         for i in range(X.shape[0]):
             pts_X = self.sample_ellipse(X[i, :2], X[i, 4].view((1, 1)), X[i, 2:4])
             pts_Y = self.sample_ellipse(Y[i, :2], Y[i, 4].view((1, 1)), Y[i, 2:4])
-            vals.append((torch.sqrt(torch.sum((pts_X - pts_Y)**2)) / pts_X.shape[0]).unsqueeze(0))
+            vals.append((torch.sqrt(torch.sum((pts_X - pts_Y)**2)) / pts_X.shape[0]).unsqueeze(0) * torch.exp(-var[i]))
         return torch.sum(torch.cat(vals))
