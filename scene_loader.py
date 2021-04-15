@@ -57,3 +57,6 @@ class Scene_loader:
         cur_obj = self.objects[self._index]
         self._index += 1
         return cur_obj
+
+    def __getitem__(self, key):
+        return self.objects[key]
