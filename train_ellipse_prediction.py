@@ -68,7 +68,8 @@ def run_training(training_dataset_file, validation_dataset_file, obj,
     training_loader = torch.utils.data.DataLoader(dataset_train, 
                                                   batch_size=_cfg.TRAIN_BATCH_SIZE,
                                                   shuffle=_cfg.TRAIN_BATCH_SHUFFLE,
-                                                  num_workers=_cfg.TRAIN_LOADER_NUM_WORKERS)
+                                                  num_workers=_cfg.TRAIN_LOADER_NUM_WORKERS,
+                                                  drop_last=True)
 
     validation_loader = torch.utils.data.DataLoader(dataset_valid, 
                                                     batch_size=_cfg.VALID_BATCH_SIZE,
