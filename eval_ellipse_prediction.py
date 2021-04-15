@@ -71,6 +71,8 @@ def main(args):
     parser.add_argument("--mode", help="<Optional> Choose between 'best'(default) or 'last' checkpoint", default="best")
     parser.add_argument("--output_images", help="<Optional> Output folder where to save "
                                                 "the images with the predicted ellipses.", default=None)
+    parser.add_argument("--object_id", help="<Optional> Specify a single object id for evaluating.",
+                        default=None, type=int)
     args = parser.parse_args(args)
 
 
@@ -79,10 +81,13 @@ def main(args):
     checkpoints_folder = args.ckpts
     mode = args.mode
     output_images = args.output_images
+    only_object_id = args.object_id
         
     scene = Scene_loader(scene_file)
 
     for obj in scene:
+        if only_object_id is not None and obj["object_id"] != only_object_id:
+            continue
         cat_id = obj["category_id"]
         obj_id = obj["object_id"]
         ckpt_file = os.path.join(checkpoints_folder, "obj_%02d_%02d" % (cat_id, obj_id),

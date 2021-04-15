@@ -162,6 +162,8 @@ class EllipsePredictor(pl.LightningModule):
             if self.output_val_images is not None:
                 draw_ellipse(img, gt, color=(255, 0, 0), thickness=3)
                 draw_ellipse(img, pred, color=(0, 255, 0))
+                var = pred_params[i, 5]
+                cv2.putText(img, "%.3f" % var, (5, 20), cv2.FONT_HERSHEY_SIMPLEX , 0.7, (0, 255, 0), 2, cv2.LINE_AA)
                 cv2.imwrite(os.path.join(self.output_val_images,
                                          "img_%04d.png" % self.val_data_index),
                             img[:, :, ::-1])

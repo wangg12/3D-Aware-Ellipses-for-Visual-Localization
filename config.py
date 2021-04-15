@@ -33,11 +33,11 @@ _cfg.TRAIN_RANDOM_BLUR = 5
 _cfg.TRAIN_PROBA_DO_AUGM = 0.5   # probability of applyin each of the augmentations
 
 _cfg.VALID_COLOR_JITTER = [0.0, 0.0, 0.0, 0.0]
-_cfg.VALID_RANDOM_SHIFT = None
+_cfg.VALID_RANDOM_SHIFT = [-50, 50]
 _cfg.VALID_RANDOM_ROTATION = None
 _cfg.VALID_RANDOM_PERSPECTIVE = None
 _cfg.VALID_RANDOM_BLUR = None
-_cfg.VALID_PROBA_AUGM = 0.0  # probability of applyin each of the augmentations
+_cfg.VALID_PROBA_AUGM = 1.0  # probability of applyin each of the augmentations
 
 
 # Training
