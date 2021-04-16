@@ -18,7 +18,7 @@ _cfg = Config()
 # Data
 _cfg.CROP_SIZE = 256
 
-# Data Transformations (use None to disable something)
+# Data Transformations (use None to disable)
 # ColorJitter: brightness, contrast, saturation, hue
 # The values are chosen uniformly in the following intervals
 # [1-BRIGHTNESS, 1+BRIGHTNESS]

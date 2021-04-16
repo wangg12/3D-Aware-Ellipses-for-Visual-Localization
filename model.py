@@ -23,17 +23,12 @@ from pytorch_lightning import loggers as pl_loggers
 from pytorch_lightning.callbacks import ModelCheckpoint
 
 from ellcv.types import Ellipse
-from ellcv.utils.cpp import compute_iou_toms_
+from ellcv.utils import compute_ellipses_iou
 from ellcv.visu import draw_ellipse
 
 from config import _cfg
 from loss import SamplingBasedLoss
 
-
-
-def compute_ellipses_iou(ell1, ell2):
-    return compute_iou_toms_(np.hstack(ell1.decompose()),
-                             np.hstack(ell2.decompose()))
 
 
 def build_ellipses_from_pred(pred):
