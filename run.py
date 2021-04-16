@@ -147,7 +147,7 @@ def main(args):
                     axes, angle, center = model.predict(crop, device)
                     center += np.array([x1, y1])
                     ellipse = Ellipse.compose(axes, angle, center)
-                    pred_ellipses_txt.append(ellipse.as_dual().tolist())
+                    pred_ellipses_txt.append(ellipse.to_dict())
                     pred_ellipses.append(ellipse)
                 det["ellipses"] = pred_ellipses_txt
                 detections_txt.append(det)

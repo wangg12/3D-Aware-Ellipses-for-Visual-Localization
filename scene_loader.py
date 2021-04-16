@@ -14,11 +14,11 @@ class Scene_loader:
         self.category_id_to_label_map = self.scene["category_id_to_label"]
         self.objects = []
         self.object_id_map = {}
-        for obj in self.scene["scene"]:
+        for obj in self.scene["objects"]:
             obj_data = {
                 "category_id": obj["category_id"],
                 "object_id": obj["object_id"],
-                "ellipsoid": Ellipsoid.from_dual(np.asarray(obj["ellipsoid"]))
+                "ellipsoid": Ellipsoid.from_dict(obj["ellipse"])
             }
             self.object_id_map[obj["object_id"]] = len(self.objects)
             self.objects.append(obj_data)

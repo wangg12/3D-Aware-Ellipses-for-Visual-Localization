@@ -52,7 +52,7 @@ class EllipsesDataset(torch.utils.data.Dataset):
                     if annot["object_id"] == self.object_id:
                         self.images_filename.append(img_annot["file_name"])
                         self.bboxes.append(annot["bbox"])
-                        self.ellipses.append(Ellipse.from_dual(np.asarray(annot["ellipse"])))
+                        self.ellipses.append(Ellipse.from_dict(annot["ellipse"]))
                         continue
             
     

@@ -82,7 +82,7 @@ def main(args):
                 "bbox_mode": 0,
                 "object_id": obj["object_id"],
                 "category_id": obj["category_id"],
-                "ellipse": ell.as_dual().tolist()
+                "ellipse": ell.to_dict()
                 }
             annotations.append(annot)
         img_data["annotations"] = annotations
@@ -93,7 +93,7 @@ def main(args):
             img = cv2.imread(f)
             for obj in annotations:
                 bbox = obj["bbox"]
-                ell = Ellipse.from_dual(np.asarray(obj["ellipse"]))
+                ell = Ellipse.from_dict(obj["ellipse"])
                 draw_bbox(img, bbox, color=(255, 255, 255))
                 draw_ellipse(img, ell)
             if visualize:
