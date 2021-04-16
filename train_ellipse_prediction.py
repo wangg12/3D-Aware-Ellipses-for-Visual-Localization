@@ -108,8 +108,7 @@ def run_training(training_dataset_file, validation_dataset_file, obj,
 
 
 
-if __name__ == "__main__":
-
+def main(args):
     parser = argparse.ArgumentParser()
     parser.add_argument("scene", help="<Required> Input Scene file containing the objects (.json)")
     parser.add_argument("training", help="<Required> Input training dataset file (.json)")
@@ -128,7 +127,7 @@ if __name__ == "__main__":
                              "not only weights (default is False).",
                         default=False)
 
-    args = parser.parse_args()
+    args = parser.parse_args(args)
 
 
     scene_file = args.scene
@@ -163,3 +162,10 @@ if __name__ == "__main__":
                      save_weights_only=save_weights_only)
 
 
+if __name__ == '__main__':
+    import sys
+    try:
+        main(sys.argv[1:])
+    except Exception as e:
+        logging.exception(e)
+        sys.exit(1)

@@ -22,14 +22,7 @@ def compute_pose(detections, scene, K, min_obj_for_P3P=4):
                         "ellipses": [ Ellipse, Ellipse, Ellipse, ...]
                     }, ...
                 ]
-            - scene: scene model:
-                [
-                    {
-                        "object_id": ...,
-                        "category_id": ...,
-                        "ellipsoid": Ellipsoid
-                    }, ...
-                ]
+            - scene: scene loader
             - K: intrinsic matrix of the camera
             - min_obj_for_P3P: minimum number of objects needed to use P3P,
                                otherwise P2E can be used.
