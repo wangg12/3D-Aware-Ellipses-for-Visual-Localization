@@ -1,11 +1,14 @@
 # 3D-Aware Ellipses for Visual Localization
 
-Extended implementation of the paper: 3D-Aware Ellipse Prediction for Object-Based Camera Pose Estimation. Matthieu Zins, Gilles Simon, Marie-Odile Berger. 3DV 2020. [Paper](https://arxiv.org/abs/2003.10432) | [Video](https://youtu.be/9NOPcOGV6nU)
+Extended implementation of the paper: 3D-Aware Ellipse Prediction for Object-Based Camera Pose Estimation. Matthieu Zins, Gilles Simon, Marie-Odile Berger. 3DV 2020. [Paper](https://hal.inria.fr/hal-02975379) | [Video](https://youtu.be/PhE4LzsqjAE)
 
 
 
-<img src='imgs/AtlasGIF.gif'/>
-<img src='imgs/figure1.jpg'/>
+
+<p align="center">
+<img src='doc/object-based-loc.png' alt="object-based-loc" height="300"/>
+</p>
+
 
 
 ## Installation
@@ -55,39 +58,45 @@ You can easily apply the method on your own dataset. There are only two required
 
 ### Scene model
 
-The localization method is based on a scene model in the form of an ellipsoid cloud. We adopted a simple JSON format this scene model, describing the ellipoids with some semantic information (i.e the object category). We provide a scene model for the Chess scene of the 7-Scene dataset, composed of 11 objects (from 7 cateories) on the Chess scene of the 7-Scenes dataset.
+The localization method is based on a scene model in the form of an ellipsoid cloud. We adopted a simple JSON format this scene model, describing the ellipoids with some semantic information (i.e the object category).
 
-```json
+```jsonc
 [
     {
         "category_id": 3,
         "object_id": 7,
         "ellipse": {
             "axes": [0.1, 0.2, 0.3],
-            "R": 3x3 rotation matrix,
+            "R": [], // 3x3 rotation matrix
             "center": [0.2, 0.2, 0.4],
         }
     },
-    ...
+    // ...
 ]
 ```
+
+ We provide a scene model for the Chess scene of the 7-Scene dataset, composed of 11 objects (from 7 cateories) on the Chess scene of the 7-Scenes dataset.
+<p align="center">
+<img src='doc/7-Scenes_scene_model.png' alt="object-based-loc" height="300"/>
+</p>
+
 
 ### Data preparation
 
 We use a common JSON format for grouping the pose-annotated images of our dataset. We provide a script (`prepare_7-Scenes.py`) for transforming the 7-Scene dataset into this format, but it can be easily adapted for your own dataset.
 
 
-```json
+```jsonc
 [
     {
         "file_name": ".../frame-000000.color.png",
         "width": 640,
         "height": 480,
-        "K": [ ... ],
-        "R": [ ... ],
-        "t": [ ... ],
+        "K": [], // 3x3 intrinsic matrix
+        "R": [], // 3x3 rotation matrix
+        "t": [], // 3-vector translation
     },
-    ...
+    // ...
 ]
 ```
 
@@ -118,8 +127,13 @@ This will generate 4 files:
 
 ## 3D-Aware ellipse prediction
 
+<p align="center">
+<img src='doc/ellipse_prediction.png' alt="object-based-loc" height="300"/>
+</p>
+
+
 ### Pre-trained models
-Pre-trained weights for the ellipse prediction part on the Chess scene can be downloaded [here]().
+Pre-trained weights for the ellipse prediction part on the Chess scene can be downloaded [here](https://www.dropbox.com/s/ip1lxextt173p03/checkpoints_ellipses_Chess.zip?dl=0).
 
 ### Training
 To train the ellipse prediction network for each object of you scene, run:
@@ -137,7 +151,7 @@ python eval_ellipse_prediction.py scene.json 7-Scenes_Chess_dataset_test_with_ob
 ## Object detection
 
 ### Pre-trained models
-Pre-trained weights for the object detection network fine-tuned on our objects of the Chess scene can be downloaded [here]().
+Pre-trained weights for the object detection network fine-tuned on our objects of the Chess scene can be downloaded [here](https://www.dropbox.com/s/fmau4nsp2zbf7fi/checkpoint_detection_Chess.pth?dl=0).
 
 ### Training
 ```
@@ -174,3 +188,6 @@ Color code:
 The top-left value is the position error (in meters) and the top-right value is the orientation error (in degrees).
 
 Notice that there might be several ellipses predicted per object, as several objects of the same category can be present in the scene and the detection module can only recognize objects categories (not instances).
+
+
+<img src='doc/7-Scenes_loc_results.png'/>

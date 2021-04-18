@@ -102,7 +102,6 @@ def main(args):
         obj_id = obj["object_id"]
         ckpt_file = os.path.join(checkpoints_folder_ellipses,
                                 "obj_%02d_%02d" % (cat_id, obj_id), "ckpt-" + mode + ".ckpt")
-        ckpt_file = glob.glob(os.path.join(checkpoints_folder_ellipses, "obj_%02d_%02d" % (cat_id, obj_id), "*.pth"))[0]
         model = EllipsePredictor().to(device)
         model.load(ckpt_file)
         if cat_id in models.keys():
