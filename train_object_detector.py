@@ -25,6 +25,8 @@ def main(args):
     training_data = args.dataset
     output_file = args.output
     output_folder = os.path.dirname(output_file)
+    if len(output_folder) == 0:
+        output_folder = "./"
     nb_epochs = args.nb_epochs
 
     def my_dataset():
