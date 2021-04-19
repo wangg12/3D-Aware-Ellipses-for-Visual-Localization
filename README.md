@@ -151,7 +151,7 @@ python eval_ellipse_prediction.py scene.json 7-Scenes_Chess_dataset_test_with_ob
 ## Object detection
 
 ### Pre-trained models
-Pre-trained weights for the object detection network fine-tuned on our objects of the Chess scene can be downloaded [here](https://www.dropbox.com/s/fmau4nsp2zbf7fi/checkpoint_detection_Chess.pth?dl=0).
+Pre-trained weights for the object detection network fine-tuned on objects of the Chess scene can be downloaded [here](https://www.dropbox.com/s/fmau4nsp2zbf7fi/checkpoint_detection_Chess.pth?dl=0).
 
 ### Training
 ```
