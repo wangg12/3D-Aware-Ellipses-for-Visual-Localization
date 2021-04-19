@@ -18,7 +18,7 @@ class Scene_loader:
             obj_data = {
                 "category_id": obj["category_id"],
                 "object_id": obj["object_id"],
-                "ellipsoid": Ellipsoid.from_dict(obj["ellipse"])
+                "ellipsoid": Ellipsoid.from_dict(obj["ellipsoid"])
             }
             self.object_id_map[obj["object_id"]] = len(self.objects)
             self.objects.append(obj_data)

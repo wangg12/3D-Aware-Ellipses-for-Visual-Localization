@@ -12,7 +12,7 @@
         {
             "category_id": 0,
             "object_id": 0,
-            "ellipse": {
+            "ellipsoid": {
                 "axes": [
                     0.17790342378298427,
                     0.4196947342281149,
@@ -45,7 +45,7 @@
         {
             "category_id": 0,
             "object_id": 1,
-            "ellipse": {
+            "ellipsoid": {
                 "axes": [
                     0.4433777080322151,
                     0.343021362184948,
@@ -78,7 +78,7 @@
         {
             "category_id": 1,
             "object_id": 2,
-            "ellipse": {
+            "ellipsoid": {
                 "axes": [
                     0.2845037494354427,
                     0.18057472335963232,
@@ -111,7 +111,7 @@
         {
             "category_id": 1,
             "object_id": 3,
-            "ellipse": {
+            "ellipsoid": {
                 "axes": [
                     0.2364234654295947,
                     0.1746075948167475,
@@ -144,7 +144,7 @@
         {
             "category_id": 2,
             "object_id": 4,
-            "ellipse": {
+            "ellipsoid": {
                 "axes": [
                     0.2130813372990089,
                     0.15798663400711946,
@@ -177,7 +177,7 @@
         {
             "category_id": 2,
             "object_id": 5,
-            "ellipse": {
+            "ellipsoid": {
                 "axes": [
                     0.24055877935769834,
                     0.1439650208931686,
@@ -210,7 +210,7 @@
         {
             "category_id": 2,
             "object_id": 6,
-            "ellipse": {
+            "ellipsoid": {
                 "axes": [
                     0.11021662375625348,
                     0.25072606804543834,
@@ -243,7 +243,7 @@
         {
             "category_id": 3,
             "object_id": 7,
-            "ellipse": {
+            "ellipsoid": {
                 "axes": [
                     0.11144366319435015,
                     0.05186568254044441,
@@ -276,7 +276,7 @@
         {
             "category_id": 4,
             "object_id": 8,
-            "ellipse": {
+            "ellipsoid": {
                 "axes": [
                     0.176306186807118,
                     0.09696996280232797,
@@ -309,7 +309,7 @@
         {
             "category_id": 5,
             "object_id": 9,
-            "ellipse": {
+            "ellipsoid": {
                 "axes": [
                     0.025678840931716667,
                     0.06426116845378854,
@@ -342,7 +342,7 @@
         {
             "category_id": 6,
             "object_id": 10,
-            "ellipse": {
+            "ellipsoid": {
                 "axes": [
                     0.08824363472966783,
                     0.06515494036182076,

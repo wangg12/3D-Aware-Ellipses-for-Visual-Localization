@@ -61,18 +61,25 @@ You can easily apply the method on your own dataset. There are only two required
 The localization method is based on a scene model in the form of an ellipsoid cloud. We adopted a simple JSON format this scene model, describing the ellipoids with some semantic information (i.e the object category).
 
 ```jsonc
-[
-    {
-        "category_id": 3,
-        "object_id": 7,
-        "ellipse": {
-            "axes": [0.1, 0.2, 0.3],
-            "R": [], // 3x3 rotation matrix
-            "center": [0.2, 0.2, 0.4],
-        }
+{
+    "category_id_to_label": {
+        "0": "tv",
+        "1": "chair",
+        // ...
     },
-    // ...
-]
+    "objects": [
+        {
+            "category_id": 3,
+            "object_id": 7,
+            "ellipsoid": {
+                "axes": [0.1, 0.2, 0.3],
+                "R": [], // 3x3 rotation matrix
+                "center": [0.2, 0.2, 0.4],
+            }
+        },
+        // ...
+    ]
+}
 ```
 
  We provide a scene model for the Chess scene of the 7-Scene dataset, composed of 11 objects (from 7 cateories) on the Chess scene of the 7-Scenes dataset.
@@ -139,12 +146,12 @@ Pre-trained weights for the ellipse prediction part on the Chess scene can be do
 To train the ellipse prediction network for each object of you scene, run:
 
 ```
-python train_ellipse_prediction.py scene.json 7-Scenes_Chess_dataset_train_with_obj_annot.json 7-Scenes_Chess_dataset_test_with_obj_annot.json ellipses_checkpoints [--nb_epochs 300]
+python train_ellipse_prediction.py data/7-Scenes_Chess_scene.json 7-Scenes_Chess_dataset_train_with_obj_annot.json 7-Scenes_Chess_dataset_test_with_obj_annot.json ellipses_checkpoints [--nb_epochs 300]
 ```
 
 ### Evaluation
 ```
-python eval_ellipse_prediction.py scene.json 7-Scenes_Chess_dataset_test_with_obj_annot.json ellipses_checkpoints [--output_images out_folder]
+python eval_ellipse_prediction.py data/7-Scenes_Chess_scene.json 7-Scenes_Chess_dataset_test_with_obj_annot.json ellipses_checkpoints [--output_images out_folder]
 ```
 
 
@@ -174,7 +181,7 @@ The `config.py` file contains parameters that can be changed. Especially, it def
 Run the following command:
 
  ```
- python run.py scene.json  7-Scenes_Chess_dataset_test.json detector_checkpoint/final.pth ellipses_checkpoints --visualize [--output_images output_folder --skip_frames 50 --output_predictions predictions.json --output_errors errors]
+ python run.py data/7-Scenes_Chess_scene.json  7-Scenes_Chess_dataset_test.json detector_checkpoint/final.pth ellipses_checkpoints --visualize [--output_images output_folder --skip_frames 50 --output_predictions predictions.json --output_errors errors]
 ```
 
 
