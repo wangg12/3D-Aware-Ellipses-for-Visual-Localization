@@ -162,7 +162,7 @@ Pre-trained weights for the object detection network fine-tuned on objects of th
 
 ### Training
 ```
-python train_object_detector.py 7-Scenes_Chess_dataset_train_with_obj_annot.json detector_checkpoint/final.pth [--nb_epochs 50]
+python train_object_detector.py 7-Scenes_Chess_dataset_train_with_obj_annot.json detector_checkpoint/final.pth [--nb_epochs 2000]
 ```
 
 
@@ -186,7 +186,7 @@ Run the following command:
 
 
 The output images represent the result of the ellipses IoU-based RANSAC.
-The objects detections found by Faster R-CNN are shown with white boxes. The bold ellipses represent the ellipsoids of the scene modle projected with the estimated camera pose. The thin ones correspond to the ellipse predictions.
+The objects detections found by Faster R-CNN are shown with white boxes. The bold ellipses represent the ellipsoids of the scene model projected with the estimated camera pose. The thin ones correspond to the ellipse predictions.
 Color code:
 - <span style="color:green">*green*</span> predicted ellipses and projected ellipsoids used inside the pose computation (P3P or P2E).
 - <span style="color:blue">*blue*</span> predicted ellipses and projected ellipsoids not directly used inside the pose computation but selected as inliers in the validation step of RANSAC.

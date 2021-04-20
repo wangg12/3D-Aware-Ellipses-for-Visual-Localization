@@ -17,7 +17,7 @@ from detectron2.engine import DefaultPredictor
 from detectron2.utils.visualizer import Visualizer
 
 from ellcv.types import Ellipse, Ellipsoid
-from ellcv.utils import pose_error
+from ellcv.utils import pose_error, ellipse_from_bbox
 from ellcv.visu import draw_ellipse, draw_bbox
 
 from config import _cfg
@@ -44,7 +44,7 @@ def main(args):
     parser.add_argument("--output_errors", default=None,
                         help="<Optional> Output folder where to write the position and orientation errors (default is None).")
     parser.add_argument("--visualize",  action="store_true", default=False,
-                        help="<Optional> Visualize each predictions and estimated poses online (default is None)")
+                        help="<Optional> Visualize each predictions and estimated poses online (default is False)")
     parser.add_argument("--only_prediction",  action="store_true", default=False,
                         help="<Optional> Do only object detection and ellipse prediction"
                             "without computing the camera pose (defaut is False).")
@@ -52,7 +52,10 @@ def main(args):
                         help="<Optional> Skip frames to process (default is 0, no skipping).")
     parser.add_argument('--min_obj_for_P3P', choices=[3, 4], type=int, default=4,
                         help="<Optional> Minimum number of required detected objects to use P3P."
-                            "When less (but >= 2) P2E can be used. (default is 4)")
+                             "When less (but >= 2) P2E can be used. (default is 4)")
+    parser.add_argument("--disable_ellipses_prediction",  action="store_true", default=False,
+                        help="<Optional> Disable ellipses prediction and fit ellipses to bounding boxes instead. "
+                             "Just pass a random name for elllipses_checkpoints (default is False)")
     args = parser.parse_args(args)
 
 
@@ -69,6 +72,7 @@ def main(args):
     skip_frames = args.skip_frames
     do_pose_computation = not args.only_prediction
     min_obj_for_P3P = args.min_obj_for_P3P
+    enable_ellipses_prediction = not args.disable_ellipses_prediction
 
 
     if output_folder is not None:
@@ -97,17 +101,18 @@ def main(args):
     # Configure Ellipse predictor
     device = torch.device("cuda")
     models = {}
-    for obj in scene:
-        cat_id = obj["category_id"]
-        obj_id = obj["object_id"]
-        ckpt_file = os.path.join(checkpoints_folder_ellipses,
-                                "obj_%02d_%02d" % (cat_id, obj_id), "ckpt-" + mode + ".ckpt")
-        model = EllipsePredictor().to(device)
-        model.load(ckpt_file)
-        if cat_id in models.keys():
-            models[cat_id].append(model)
-        else:
-            models[cat_id] = [model]
+    if enable_ellipses_prediction:
+        for obj in scene:
+            cat_id = obj["category_id"]
+            obj_id = obj["object_id"]
+            ckpt_file = os.path.join(checkpoints_folder_ellipses,
+                                    "obj_%02d_%02d" % (cat_id, obj_id), "ckpt-" + mode + ".ckpt")
+            model = EllipsePredictor().to(device)
+            model.load(ckpt_file)
+            if cat_id in models.keys():
+                models[cat_id].append(model)
+            else:
+                models[cat_id] = [model]
 
 
     # Processing loop
@@ -136,23 +141,27 @@ def main(args):
             if s > cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST:
                 det = {"category_id": int(c), "score": float(s), "bbox":b.tolist()}
                 x1, y1, x2, y2 = force_square_bbox(b, margin=2)
-                crop = img_pil.crop((x1, y1, x2, y2))
-                if c not in models.keys():
-                    continue
-                # Run ellipse prediction
                 pred_ellipses_txt = []
                 pred_ellipses = []
-                for model in models[c]:
-                    axes, angle, center = model.predict(crop, device)
-                    center += np.array([x1, y1])
-                    ellipse = Ellipse.compose(axes, angle, center)
+                if enable_ellipses_prediction and c in models.keys():
+                    # Run ellipse prediction
+                    crop = img_pil.crop((x1, y1, x2, y2))
+                    for model in models[c]:
+                        axes, angle, center = model.predict(crop, device)
+                        center += np.array([x1, y1])
+                        ellipse = Ellipse.compose(axes, angle, center)
+                        pred_ellipses_txt.append(ellipse.to_dict())
+                        pred_ellipses.append(ellipse)
+                else:
+                    # Fit ellipse directly to bbox
+                    ellipse = ellipse_from_bbox(*b.flatten())
                     pred_ellipses_txt.append(ellipse.to_dict())
                     pred_ellipses.append(ellipse)
                 det["ellipses"] = pred_ellipses_txt
                 detections_txt.append(det)
                 detections.append({"category_id": int(c),
-                                "bbox": b.tolist(), 
-                                "ellipses" : pred_ellipses})
+                                   "bbox": b.tolist(),
+                                   "ellipses" : pred_ellipses})
 
         out_data = {"file_name": f, 
                     "bbox": b.tolist(),

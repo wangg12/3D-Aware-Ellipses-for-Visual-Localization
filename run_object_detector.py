@@ -30,7 +30,7 @@ def main(args):
     parser.add_argument("--save_detections_file", default=None,
                         help="<Optional> File where to write the detections (.json).")
     parser.add_argument("--visualize",  action="store_true", default=False,
-                        help="<Optional> Visualize the object detected in each image (default is None).")
+                        help="<Optional> Visualize the object detected in each image (default is False).")
     parser.add_argument("--skip_frames", default=0, type=int,
                         help="<Optional> Skip frames to process (default is 0, no skipping).")
     args = parser.parse_args(args)
@@ -85,8 +85,6 @@ def main(args):
                 det = {"category_id": int(c), "score": float(s), "bbox":b.tolist()}
                 detections.append(det)
         pred_data.append({"file_name": f, "detections": detections})
-
-        print("\rProgress:  ", idx, "/", len(dataset), end="", flush=True)
 
     if output_file is not None:
         with open(output_file, "w") as fout:
