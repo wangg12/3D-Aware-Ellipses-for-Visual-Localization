@@ -1,10 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Thu Mar 11 21:56:29 2021
-
-@author: mzins
-"""
 import argparse
 import glob
 import json
@@ -21,11 +14,11 @@ import pytorch_lightning as pl
 from pytorch_lightning import loggers as pl_loggers
 from pytorch_lightning.callbacks import ModelCheckpoint
 
-from config import _cfg
-from dataset import EllipsesDataset
-from model import EllipsePredictor
-from loss import SamplingBasedLoss
-from scene_loader import Scene_loader
+from config.config import _cfg
+from dataset.dataset import EllipsesDataset
+from dataset.scene_loader import Scene_loader
+from ellipse_prediction.model import EllipsePredictor
+from ellipse_prediction.loss import SamplingBasedLoss
 
 
 
@@ -160,6 +153,7 @@ def main(args):
                      out_checkpoints_folder=out_checkpoints_folder,
                      out_logs_folder=out_logs_folder,
                      save_weights_only=save_weights_only)
+
 
 
 if __name__ == '__main__':

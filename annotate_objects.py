@@ -1,8 +1,3 @@
-#!/usr/bin/env python3
-"""
-@author: mzins
-"""
-
 import argparse
 import json
 import logging
@@ -15,9 +10,9 @@ from ellcv.types import Ellipsoid, Ellipse
 from ellcv.utils import bbox_from_ellipse
 from ellcv.visu import draw_bbox, draw_ellipse
 
-from dataset_loader import Dataset_loader
-from scene_loader import Scene_loader
-from utils import create_if_needed
+from dataset.dataset_loader import Dataset_loader
+from dataset.scene_loader import Scene_loader
+from utils.utils import create_if_needed
 
 """
     Generate object annotations.

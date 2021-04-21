@@ -9,7 +9,7 @@ from detectron2.config import get_cfg
 from detectron2.data import DatasetCatalog, MetadataCatalog
 from detectron2.engine import DefaultTrainer
 
-from config import _cfg
+from config.config import _cfg
 
 
 def main(args):

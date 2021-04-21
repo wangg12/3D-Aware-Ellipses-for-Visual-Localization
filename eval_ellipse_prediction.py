@@ -8,11 +8,10 @@ import torch
 from torchvision import transforms
 import pytorch_lightning as pl
 
-from config import _cfg
-from dataset import EllipsesDataset
-from model import EllipsePredictor
-from scene_loader import Scene_loader
-
+from config.config import _cfg
+from dataset.dataset import EllipsesDataset
+from dataset.scene_loader import Scene_loader
+from ellipse_prediction.model import EllipsePredictor
 
 
 
@@ -97,6 +96,7 @@ def main(args):
         if output_images is not None:
             out = os.path.join(output_images, "obj_%02d_%02d" % (cat_id, obj_id))
         run_evaluation(eval_dataset_file, (cat_id, obj_id), ckpt_file, out)
+
 
 
 if __name__ == '__main__':

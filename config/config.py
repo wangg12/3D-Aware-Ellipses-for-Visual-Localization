@@ -1,10 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Fri Mar 12 22:45:10 2021
-
-@author: mzins
-"""
 
 
 class Config():

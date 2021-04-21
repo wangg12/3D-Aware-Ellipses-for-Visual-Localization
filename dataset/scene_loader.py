@@ -2,6 +2,7 @@ import json
 import numpy as np
 from ellcv.types import Ellipsoid
 
+
 class Scene_loader:
     """
         Interace with our own scene file format.

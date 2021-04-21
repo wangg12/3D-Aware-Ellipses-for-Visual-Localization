@@ -20,12 +20,12 @@ from ellcv.types import Ellipse, Ellipsoid
 from ellcv.utils import pose_error, ellipse_from_bbox
 from ellcv.visu import draw_ellipse, draw_bbox
 
-from config import _cfg
-from dataset_loader import Dataset_loader
-from model import EllipsePredictor
-from pose_computation import compute_pose
-from scene_loader import Scene_loader
-from utils import create_if_needed, force_square_bbox
+from config.config import _cfg
+from dataset.dataset_loader import Dataset_loader
+from dataset.scene_loader import Scene_loader
+from ellipse_prediction.model import EllipsePredictor
+from utils.pose_computation import compute_pose
+from utils.utils import create_if_needed, force_square_bbox
 
 
 def main(args):
@@ -262,6 +262,7 @@ def main(args):
 
     if output_file is not None:
         print("\nOutput predictions and poses saved in", output_file)
+
 
 
 if __name__ == '__main__':

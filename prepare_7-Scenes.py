@@ -1,8 +1,3 @@
-#!/usr/bin/env python3
-"""
-@author: Matthieu Zins
-"""
-
 import argparse
 import glob
 import json
@@ -75,6 +70,8 @@ def main(args):
 
     print(*input_folders, sep="\n")
     print("Dataset file from the selected sequences saved in:", output_dataset_file)
+
+
 
 if __name__ == '__main__':
     import sys

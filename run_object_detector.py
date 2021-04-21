@@ -15,9 +15,9 @@ from detectron2.data import DatasetCatalog, MetadataCatalog
 from detectron2.engine import DefaultPredictor
 from detectron2.utils.visualizer import Visualizer
 
-from config import _cfg
-from dataset_loader import Dataset_loader
-from utils import create_if_needed
+from config.config import _cfg
+from dataset.dataset_loader import Dataset_loader
+from utils.utils import create_if_needed
 
 
 
@@ -26,7 +26,7 @@ def main(args):
 
     parser.add_argument("dataset", help="<Required> Input dataset file (.json).")
     parser.add_argument("detector_checkpoint", help="<Required> Detector checkpoint.")
-    parser.add_argument("output", help="<Required> Folder where to output the images with detections.")
+    parser.add_argument("output_images", help="<Required> Folder where to output the images with detections.")
     parser.add_argument("--save_detections_file", default=None,
                         help="<Optional> File where to write the detections (.json).")
     parser.add_argument("--visualize",  action="store_true", default=False,
@@ -38,7 +38,7 @@ def main(args):
 
     dataset = args.dataset
     detector_checkpoint = args.detector_checkpoint
-    output_folder = args.output
+    output_folder = args.output_images
     output_file = args.save_detections_file
     visualize = args.visualize
     skip_frames = args.skip_frames

@@ -1,12 +1,5 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Thu Mar 11 21:56:29 2021
-
-@author: mzins
-"""
-
 import os
+import sys
 
 import cv2
 import numpy as np
@@ -26,8 +19,9 @@ from ellcv.types import Ellipse
 from ellcv.utils import compute_ellipses_iou
 from ellcv.visu import draw_ellipse
 
-from config import _cfg
-from loss import SamplingBasedLoss
+sys.path.append("../config")
+from config.config import _cfg
+from ellipse_prediction.loss import SamplingBasedLoss
 
 
 

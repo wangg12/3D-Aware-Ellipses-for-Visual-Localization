@@ -1,12 +1,7 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-@author: Matthieu Zins
-"""
-
 import argparse
 import json
 import logging
+import sys
 
 import cv2
 import numpy as np
@@ -17,8 +12,8 @@ from torchvision import transforms
 from ellcv.types import Ellipse
 from ellcv.visu import draw_ellipse
 
-from utils import force_square_bbox
-
+sys.path.append("../utils")
+from utils.utils import force_square_bbox
 
 
 class EllipsesDataset(torch.utils.data.Dataset):

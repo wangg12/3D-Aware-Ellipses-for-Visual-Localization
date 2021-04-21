@@ -1,11 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Wed Mar 10 11:56:31 2021
-
-@author: mzins
-"""
-
 import math
 import os
 
