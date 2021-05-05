@@ -54,3 +54,15 @@ class Dataset_loader:
             print("Invalid index")
             return None
         return self.dataset[idx]["file_name"]
+
+    def get_annotations(self, idx):
+        """
+            Get objects annotations.
+        """
+        if idx < 0 or idx >= self.nb_images:
+            print("Invalid index")
+            return None
+        if "annotations" not in self.dataset[idx].keys():
+            print("No annotations available")
+            return None
+        return self.dataset[idx]["annotations"]
