@@ -26,11 +26,11 @@ conda env create -f env/environment.yml
 The code additionally depends on the **pyellcv** library for ellipses/ellipsoids manipulation and pose computation.
 
 ```
-python -m pip install 'git+https://gitlab.inria.fr/mzins/pyellcv.git'
+python -m pip install 'git+https://github.com/zinsmatt/pyellcv.git'
 # (add --user if you don't have permission)
 
 # Or, to install it from a local clone:
-git clone git+https://gitlab.inria.fr/mzins/pyellcv.git
+git clone git+https://github.com/zinsmatt/pyellcv.git
 python -m pip install -e ./pyellcv
 ```
 

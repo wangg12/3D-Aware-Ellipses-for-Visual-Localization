@@ -15,6 +15,8 @@ from detectron2.data import DatasetCatalog, MetadataCatalog
 from detectron2.engine import DefaultPredictor
 from detectron2.utils.visualizer import Visualizer
 
+from ellcv.visu import draw_bbox
+
 from config.config import _cfg
 from dataset.dataset_loader import Dataset_loader
 from utils.utils import create_if_needed
@@ -31,6 +33,8 @@ def main(args):
                         help="<Optional> File where to write the detections (.json).")
     parser.add_argument("--visualize",  action="store_true", default=False,
                         help="<Optional> Visualize the object detected in each image (default is False).")
+    parser.add_argument("--display_gt",  action="store_true", default=False,
+                        help="<Optional> Display the ground truth objects bounding boxes (default is False).")
     parser.add_argument("--skip_frames", default=0, type=int,
                         help="<Optional> Skip frames to process (default is 0, no skipping).")
     args = parser.parse_args(args)
@@ -41,6 +45,7 @@ def main(args):
     output_folder = args.output_images
     output_file = args.save_detections_file
     visualize = args.visualize
+    display_gt = args.display_gt
     skip_frames = args.skip_frames
 
     create_if_needed(output_folder)
@@ -60,17 +65,26 @@ def main(args):
     for idx in range(0, len(loader), 1+skip_frames):
         f = loader.get_rgb_filename(idx)
         name = os.path.splitext(os.path.basename(f))[0]
+        name = "_".join(f.split("/")[-2:])
         im = cv2.imread(f)
 
         predictions = predictor(im)
         v = Visualizer(im[:, :, ::-1], scale=1.0)
         out = v.draw_instance_predictions(predictions["instances"].to("cpu"))
+        im_viz = out.get_image().copy()
+
+        if display_gt:
+            annot = loader.get_annotations(idx)
+            if annot is not None:
+                for obj in annot:
+                    bbox = obj["bbox"]
+                    draw_bbox(im_viz, bbox, color=(255, 0, 0))
 
         if visualize:
-            cv2.imshow("fen", out.get_image()[:, :, ::-1])
+            cv2.imshow("fen", im_viz[:, :, ::-1])
             cv2.waitKey(-1)
 
-        cv2.imwrite(os.path.join(output_folder, name + ".png"), out.get_image()[:, :, ::-1])
+        cv2.imwrite(os.path.join(output_folder, name + ".png"), im_viz[:, :, ::-1])
 
         instances = predictions["instances"]
         classes = instances.get("pred_classes").cpu().numpy().astype(int)
