@@ -50,9 +50,6 @@ def main(args):
                             "without computing the camera pose (defaut is False).")
     parser.add_argument("--skip_frames", default=0, type=int,
                         help="<Optional> Skip frames to process (default is 0, no skipping).")
-    parser.add_argument('--min_obj_for_P3P', choices=[3, 4], type=int, default=4,
-                        help="<Optional> Minimum number of required detected objects to use P3P."
-                             "When less (but >= 2) P2E can be used. (default is 4)")
     parser.add_argument("--disable_ellipses_prediction",  action="store_true", default=False,
                         help="<Optional> Disable ellipses prediction and fit ellipses to bounding boxes instead. "
                              "Just pass a random name for elllipses_checkpoints (default is False)")
@@ -71,7 +68,6 @@ def main(args):
     visualize = args.visualize
     skip_frames = args.skip_frames
     do_pose_computation = not args.only_prediction
-    min_obj_for_P3P = args.min_obj_for_P3P
     enable_ellipses_prediction = not args.disable_ellipses_prediction
 
 
@@ -173,7 +169,7 @@ def main(args):
 
         if do_pose_computation:
             # Compute camera pose
-            pose, used_pairs, inliers = compute_pose(detections, scene, K, min_obj_for_P3P=min_obj_for_P3P)
+            pose, used_pairs, inliers = compute_pose(detections, scene, K)
             if pose is None:
                 output_data.append(out_data)
                 continue
