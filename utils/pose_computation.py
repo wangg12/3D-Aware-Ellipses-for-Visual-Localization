@@ -1,10 +1,10 @@
 import numpy as np
 
-from ellcv.algo.cpp import solveP2E_ransac, solveP3P_ransac
+from ellcv.algo.cpp import solveP3P_ransac
 from ellcv.types import Ellipsoid, Ellipse
 
 
-def compute_pose(detections, scene, K, min_obj_for_P3P=4):
+def compute_pose(detections, scene, K):
     """
         Compute the camera pose using objects detections and a known scene model.
         Parameters:
@@ -18,8 +18,6 @@ def compute_pose(detections, scene, K, min_obj_for_P3P=4):
                 ]
             - scene: scene loader
             - K: intrinsic matrix of the camera
-            - min_obj_for_P3P: minimum number of objects needed to use P3P,
-                               otherwise P2E can be used.
     """
 
     # Find mapping between detections and objects classes
@@ -42,14 +40,13 @@ def compute_pose(detections, scene, K, min_obj_for_P3P=4):
     detections_ellipses_duals = [[ell.as_dual() for ell in pred["ellipses"]] for pred in detections]
     
         
-    if len(detections_bboxes) >= min_obj_for_P3P:
-        best_index, poses, scores, used_pairs, inliers = solveP3P_ransac(
-            ellipsoids_duals, ellipsoids_categories, detections_bboxes,
-            detections_categories, detections_ellipses_duals, K)
-    else:
-        best_index, poses, scores, used_pairs, inliers = solveP2E_ransac(
-            ellipsoids_duals, ellipsoids_categories, detections_bboxes,
-            detections_categories, detections_ellipses_duals, K)
+    if len(detections_bboxes) < 3:
+        print("Pose computation failed: Not enough objects can be used.")
+        return None, None, None
+
+    best_index, poses, scores, used_pairs, inliers = solveP3P_ransac(
+        ellipsoids_duals, ellipsoids_categories, detections_bboxes,
+        detections_categories, detections_ellipses_duals, K)
 
     if best_index < 0:
         print("Pose computation failed: No valid pose could be obtained.")

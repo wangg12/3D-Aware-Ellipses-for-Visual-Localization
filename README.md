@@ -1,6 +1,6 @@
 # 3D-Aware Ellipses for Visual Localization
 
-Extended implementation of the paper: *3D-Aware Ellipse Prediction for Object-Based Camera Pose Estimation. Matthieu Zins, Gilles Simon, Marie-Odile Berger*, 3DV 2020. [Paper](https://hal.inria.fr/hal-02975379) | [Video](https://youtu.be/PhE4LzsqjAE)
+Extended implementation of the paper: *3D-Aware Ellipse Prediction for Object-Based Camera Pose Estimation. Matthieu Zins, Gilles Simon, Marie-Odile Berger*, 3DV 2020 (Oral). [Paper](https://hal.inria.fr/hal-02975379) | [Video](https://youtu.be/PhE4LzsqjAE)
 
 
 
@@ -23,14 +23,14 @@ conda env create -f env/environment.yml
 
 ### Pyellcv library
 
-The code additionally depends on the **pyellcv** library for ellipses/ellipsoids manipulation and pose computation.
+The code additionally depends on the [**pyellcv**](https://github.com/zinsmatt/pyellcv) library for ellipses/ellipsoids manipulation and pose computation.
 
 ```
 python -m pip install 'git+https://github.com/zinsmatt/pyellcv.git'
 # (add --user if you don't have permission)
 
 # Or, to install it from a local clone:
-git clone git+https://github.com/zinsmatt/pyellcv.git
+git clone --recursive https://github.com/zinsmatt/pyellcv.git
 python -m pip install -e ./pyellcv
 ```
 
@@ -108,7 +108,7 @@ We use a common JSON format for grouping the pose-annotated images of our datase
 ```
 
 
-> **WARNING**: Because of assumptions on the camera roll made in P2E (required when only 2 objects are visible), the z-axis of the scene coordinate system needs to be vertical (and the XY-plane is horizontal). If this is not the case in your dataset but you still want to handle the 2-objects case, you will need to transform the scene coordinate system. This is what we did for the Chess scene (see `prepare_7-Scenes.py`).
+> **WARNING**: Because of assumptions on the camera roll made in P2E (required when only 2 objects are visible), the z-axis of the scene coordinate system needs to be vertical (and the XY-plane is horizontal). If this is not the case in your dataset but you still want to handle the 2-objects case, you will need to transform the scene coordinate system. This is what we did for the Chess scene (see `prepare_7-Scenes.py`). **Note that this transformation is not needed if you use P3P**.
 
 
 
@@ -178,6 +178,9 @@ python run_object_detector.py 7-Scenes_Chess_dataset_test.json detector_checkpoi
 The `config.py` file contains parameters that can be changed. Especially, it defines the level and kind of data augmentation used during training.
 
  ## Running visual localization
+
+> **WARNING**: The code for camera pose estimation using P1E and P2E could not be released publicly. This repository is thus limited to the P3P version, which anyway performs better and can handle almost all the cases. (Compared to the paper, only the 2-object case is not covered.)
+
 In order to run the full visual localization pipeline, you need:
 * the test dataset file in JSON format.
 * trained weights for the object detection network (Faster R-CNN).
